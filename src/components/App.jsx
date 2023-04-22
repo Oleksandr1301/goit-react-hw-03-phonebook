@@ -52,6 +52,18 @@ export class App extends Component {
     return filterContact;
   };
 
+  componentDidMount() {
+    const contacts = JSON.parse(localStorage.getItem('id'));
+    this.setState({ contacts });
+    
+  }
+
+componentDidUpdate(prevState) {
+  if (prevState.contacts !== this.state.contacts) {
+    localStorage.setItem('id', JSON.stringify(this.state.contacts));
+  }
+}
+
   render() {
     const { contacts, filter } = this.state;
 
