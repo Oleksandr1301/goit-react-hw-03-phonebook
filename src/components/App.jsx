@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { PhoneForm } from './phoneForm/phoneForm';
 
 import { ContactFilter } from './contactFilter/contactFilter';
-import {ContactList} from './contactList/contactList';
-
+import { ContactList } from './contactList/contactList';
 
 export class App extends Component {
   state = {
@@ -53,23 +52,32 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    const contacts = JSON.parse(localStorage.getItem('id'));
-    this.setState({ contacts });
-    
+     const contacts = localStorage.getItem(
+      'id'
+    );
+
+    if (contacts) {
+      try {
+        const parseContactList = JSON.parse(contacts);
+        this.setState({ contacts: parseContactList });
+      } catch {
+        this.setState({ contacts: [] });
+      }
+    }
   }
 
-componentDidUpdate(prevState) {
-  if (prevState.contacts !== this.state.contacts) {
-    localStorage.setItem('id', JSON.stringify(this.state.contacts));
+  componentDidUpdate(prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('id', JSON.stringify(this.state.contacts));
+    }
   }
-}
 
   render() {
     const { contacts, filter } = this.state;
 
     return (
       <div>
-        <h1 >Phonebook</h1>
+        <h1>Phonebook</h1>
         <PhoneForm onSubmit={this.onformSubmit} contacts={contacts} />
         <h2>Contacts</h2>
         <ContactFilter onFilter={this.onFilter} filter={filter} />
